@@ -16,8 +16,8 @@
 // ==UserScript==
 // @name          nuSweepFC
 // @description   Planets.nu plugin for "FC sweep"
-// @version       0.01.02
-// @date          2019-05-12
+// @version       0.01.04
+// @date          2019-05-13
 // @author        drgirasol
 // @include       http://planets.nu/*
 // @include       https://planets.nu/*
@@ -27,8 +27,8 @@
 // @include       https://test.planets.nu/*
 // @supportURL    https://github.com/drgirasol/nusweepfc/issues
 // @homepageURL   https://github.com/drgirasol/nusweepfc/wiki
-// @updateURL     https://greasyfork.org/scripts/26189-nusweepfc/code/nusweepfc.js
-// @downloadURL   https://greasyfork.org/scripts/26189-nusweepfc/code/nusweepfc.js
+// @updateURL     https://greasyfork.org/scripts/382967-nusweepfc/code/nuSweepFC.user.js
+// @downloadURL   https://greasyfork.org/scripts/382967-nusweepfc/code/nuSweepFC.user.js
 // @grant         none
 
 // ==/UserScript==
