@@ -16,8 +16,8 @@
 // ==UserScript==
 // @name          nuSweepFC
 // @description   Planets.nu plugin for "FC sweep"
-// @version       0.01.04
-// @date          2019-05-13
+// @version       0.01.05
+// @date          2019-05-19
 // @author        drgirasol
 // @include       http://planets.nu/*
 // @include       https://planets.nu/*
@@ -27,8 +27,8 @@
 // @include       https://test.planets.nu/*
 // @supportURL    https://github.com/drgirasol/nusweepfc/issues
 // @homepageURL   https://github.com/drgirasol/nusweepfc/wiki
-// @updateURL     https://greasyfork.org/scripts/382967-nusweepfc/code/nuSweepFC.user.js
-// @downloadURL   https://greasyfork.org/scripts/382967-nusweepfc/code/nuSweepFC.user.js
+// @updateURL     https://greasyfork.org/scripts/382967-nusweepfc/code/nusweepfc.js
+// @downloadURL   https://greasyfork.org/scripts/382967-nusweepfc/code/nusweepfc.js
 // @grant         none
 
 // ==/UserScript==
@@ -66,19 +66,42 @@ let sweepfc = {
             return m.messagetype === 19 && match !== null && potEnemies.indexOf(match[1]) > -1;
         });
         console.log(mineScanReports);
-        mineScanReports.forEach(function (m) {
-            vgap.messages.push({
-                body: m.body,
-                headline: m.headline,
-                id: m.id,
-                messagetype: 23,
-                ownerid: m.ownerid,
-                target: m.target,
-                turn: m.turn,
-                x: m.x,
-                y: m.y
-            });
+        let sfcReportIds = vgap.messages.filter(function (m) {
+            return m.messagetype === 23;
+        }).map(function (m) {
+            return m.id;
         });
+        if (mineScanReports.length > 0) {
+            mineScanReports.forEach(function (m) {
+                if (sfcReportIds.indexOf(m.id) === -1) {
+                    vgap.messages.push({
+                        body: m.body,
+                        headline: m.headline,
+                        id: m.id,
+                        messagetype: 23,
+                        ownerid: m.ownerid,
+                        target: m.target,
+                        turn: m.turn,
+                        x: m.x,
+                        y: m.y
+                    });
+                }
+            });
+        } else {
+            if (sfcReportIds.indexOf(11223344) === -1) {
+                vgap.messages.push({
+                    body: "Nothing to report",
+                    headline: "FC Sweep",
+                    id: 11223344,
+                    messagetype: 23,
+                    ownerid: vgap.player.id,
+                    target: false,
+                    turn: vgap.game.turn,
+                    x: 0,
+                    y: 0
+                });
+            }
+        }
     },
     /*
      * DRAWING
