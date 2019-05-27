@@ -16,8 +16,8 @@
 // ==UserScript==
 // @name          nuSweepFC
 // @description   Planets.nu plugin for "FC sweep"
-// @version       0.01.05
-// @date          2019-05-19
+// @version       0.01.06
+// @date          2019-05-27
 // @author        drgirasol
 // @include       http://planets.nu/*
 // @include       https://planets.nu/*
@@ -53,6 +53,23 @@ let sweepfc = {
             return raceAdjectives[r.playertoid];
         });
     },
+    getScannerId: function(m) {
+        let matchId = m.headline.match(/ID#(\d+)/);
+        if (matchId) {
+            return matchId[1];
+        } else {
+            return false;
+        }
+    },
+    injectShipFC: function(m, ship) {
+        let lines = m.body.split("<br/>");
+        let newBody = [];
+        lines.forEach(function (line) {
+            newBody.push(line);
+            if (line.match(/AT:\s\(/)) newBody.push("FC: " + ship.friendlycode);
+        });
+        m.body = newBody.join("<br/>");
+    },
     scanReports: function() {
         console.warn("Scanning mine scan reports for 'friendly' enemies...");
         vgap.messageTypes.push("FC Sweep");
@@ -74,6 +91,10 @@ let sweepfc = {
         if (mineScanReports.length > 0) {
             mineScanReports.forEach(function (m) {
                 if (sfcReportIds.indexOf(m.id) === -1) {
+                    let shipId = sweepfc.getScannerId(m);
+                    if (shipId) {
+                        sweepfc.injectShipFC(m, vgap.getShip(shipId));
+                    }
                     vgap.messages.push({
                         body: m.body,
                         headline: m.headline,
