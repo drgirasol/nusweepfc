@@ -16,8 +16,8 @@
 // ==UserScript==
 // @name          nuSweepFC
 // @description   Planets.nu plugin for "FC sweep"
-// @version       0.01.06
-// @date          2019-05-27
+// @version       0.01.07
+// @date          2019-06-09
 // @author        drgirasol
 // @include       http://planets.nu/*
 // @include       https://planets.nu/*
@@ -93,7 +93,12 @@ let sweepfc = {
                 if (sfcReportIds.indexOf(m.id) === -1) {
                     let shipId = sweepfc.getScannerId(m);
                     if (shipId) {
-                        sweepfc.injectShipFC(m, vgap.getShip(shipId));
+                        let curShip = vgap.getShip(shipId);
+                        if (curShip) {
+                            sweepfc.injectShipFC(m, curShip);
+                        } else {
+                            console.error("Ship with ID '%s' could not be retrieved", shipId);
+                        }
                     }
                     vgap.messages.push({
                         body: m.body,
