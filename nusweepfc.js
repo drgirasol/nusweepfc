@@ -16,8 +16,8 @@
 // ==UserScript==
 // @name          nuSweepFC
 // @description   Planets.nu plugin for "FC sweep"
-// @version       0.01.07
-// @date          2019-06-09
+// @version       0.01.08
+// @date          2019-06-11
 // @author        drgirasol
 // @include       http://planets.nu/*
 // @include       https://planets.nu/*
@@ -76,13 +76,13 @@ let sweepfc = {
         //vgap.messageTypeCount.push(1);
         let raceAdjectives = sweepfc.getRaceAdjectives();
         let potEnemies = sweepfc.getPotentialRaceAdjectives(raceAdjectives);
-        console.log(potEnemies);
+        //console.log(potEnemies);
         let mineScanReports = vgap.messages.filter(function (m) {
             let match = m.body.match(/\(([A-Za-z]+)\) has granted us safe passage/);
             //if (m.messagetype === 19 && m.body.match(/has granted us safe passage/) !== null) console.log(m.body);
             return m.messagetype === 19 && match !== null && potEnemies.indexOf(match[1]) > -1;
         });
-        console.log(mineScanReports);
+        //console.log(mineScanReports);
         let sfcReportIds = vgap.messages.filter(function (m) {
             return m.messagetype === 23;
         }).map(function (m) {
@@ -97,8 +97,10 @@ let sweepfc = {
                         if (curShip) {
                             sweepfc.injectShipFC(m, curShip);
                         } else {
-                            console.error("Ship with ID '%s' could not be retrieved", shipId);
+                            console.error("Ship data for s'%s' could not be accessed!", shipId);
                         }
+                    } else {
+                        console.error("Ship ID could not be determined from report!", m);
                     }
                     vgap.messages.push({
                         body: m.body,
